@@ -3,21 +3,19 @@ Made by Aksel Vaillant with Maven and IntelliJ with a JDK 1.8
 
 ![img.png](img.png)
 
-La configuration nommée TP permet de lancer à la fois le main de FTPServer, dans un premier temps, et ensuite,
-le main de FTPClient.
+The configuration named TP allows you to run both the FTPServer main, first, and then the FTPClient main.
 
 ## Programme
-Pour faire fonctionner le programme, il faut préalablement remplir le DEFAULT_DIRECTION_FOLDER 
-qui contient les fichiers serveur et client, et ajouter un double backslash à la fin (\\), 
-c'est un attribut qui se situe dans les 2 classes : FTPClient et FTPServer. 
+To make the program work, you must first fill the DEFAULT_DIRECTION_FOLDER 
+which contains the server and client files, and add a double backslash at the end, 
+It is an attribute which is located in the 2 classes : FTPClient and FTPServer.
 
-Exemple test de l'emplacement des fichiers ressources pour le client :
+Example test of the location of the resource files for the client :
 
     private final String DEFAULT_DIRECTION_FOLDER = "...\\src\\main\\resources\\CLIENT_DIR\\";
 
-Dans le main de FTPServer, il faut ainsi commencer à lancer le serveur. Les diverses commandes s'effectuent 
-correctement avec le client.
+In the FTPServer main, you must start the server. 
+The various commands are carried out correctly with the client.
 
-Egalement, le choix de ne pas vouloir split la commande en plusieurs sous parties est voulu pour
-une expérience plus compréhensible.
+Also, the choice of not splitting the command into several subparts is intended for a better user experience (UX). 
 
