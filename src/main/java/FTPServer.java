@@ -50,7 +50,7 @@ public class FTPServer {
         System.out.println("Receiving a file request from the client.");
         String nameFile = in.readLine();
 
-        // Création du nom du fichier
+        // Creating the file
         File file = new File(DEFAULT_DIRECTION_FOLDER + nameFile);
         System.out.println("Saving the file " + nameFile + " in progress.");
         FileOutputStream fileOutputStream = new FileOutputStream(file);
