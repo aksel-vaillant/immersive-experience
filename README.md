@@ -5,7 +5,7 @@ Made by Aksel Vaillant with Maven and IntelliJ with a JDK 1.8
 
 The configuration named TP allows you to run both the FTPServer main, first, and then the FTPClient main.
 
-## Programme
+## Program
 To make the program work, you must first fill the DEFAULT_DIRECTION_FOLDER 
 which contains the server and client files, and add a double backslash at the end, 
 It is an attribute which is located in the 2 classes : FTPClient and FTPServer.
