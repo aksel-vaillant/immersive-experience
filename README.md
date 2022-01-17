@@ -1,28 +1,21 @@
-#TP3 - TCP
-Programme réalisé par Aksel Vaillant sous Maven et IntelliJ avec le JDK 1.8
+# Making a FCP server/client able to send and save files
+Made by Aksel Vaillant with Maven and IntelliJ with a JDK 1.8
 
 ![img.png](img.png)
 
-##Configuration de Maven
-Si le programme est exécuté à l'ENSIM, il faut inclure le fichier settings.xml dans le dossier .m2 
-situé dans le dossier User pour le proxy. Une fois ajouté, il suffit de cliquer sur "clean" et puis 
-"install" dans le sous-menu Maven pour installer l'ensemble des dépendances.
+The configuration named TP allows you to run both the FTPServer main, first, and then the FTPClient main.
 
-La configuration nommée TP permet de lancer à la fois le main de FTPServer, dans un premier temps, et ensuite,
-le main de FTPClient.
+## Program
+To make the program work, you must first fill the DEFAULT_DIRECTION_FOLDER 
+which contains the server and client files, and add a double backslash at the end, 
+It is an attribute which is located in the 2 classes : FTPClient and FTPServer.
 
-##Programme
-Pour faire fonctionner le programme, il faut préalablement remplir le DEFAULT_DIRECTION_FOLDER 
-qui contient les fichiers serveur et client, et ajouter un double backslash à la fin (\\), 
-c'est un attribut qui se situe dans les 2 classes : FTPClient et FTPServer. 
+Example test of the location of the resource files for the client :
 
-Exemple test de l'emplacement des fichiers ressources pour le client :
+    private final String DEFAULT_DIRECTION_FOLDER = "...\\src\\main\\resources\\CLIENT_DIR\\";
 
-    private final String DEFAULT_DIRECTION_FOLDER = "....\\TP3 - TCP\\src\\main\\resources\\CLIENT_DIR\\";
+In the FTPServer main, you must start the server. 
+The various commands are carried out correctly with the client.
 
-Dans le main de FTPServer, il faut ainsi commencer à lancer le serveur. Les diverses commandes s'effectuent 
-correctement avec le client.
-
-Egalement, le choix de ne pas vouloir split la commande en plusieurs sous parties est voulu pour
-une expérience plus compréhensible.
+Also, the choice of not splitting the command into several subparts is intended for a better user experience (UX). 
 
