@@ -19,6 +19,8 @@ The various commands are carried out correctly with the client.
 
 Also, the choice of not splitting the command into several subparts is intended for a better user experience (UX). 
 
+https://heptadecane.medium.com/file-transfer-via-java-sockets-e8d4f30703a5
+
 ## Step 2 : Display media files and pilot a Raspberry Pi card 
 
 The aim of this part is to connect a server with a couple of Raspeberry Pi cards to display different contents such as picture or video. 
