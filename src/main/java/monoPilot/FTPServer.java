@@ -1,6 +1,9 @@
+package monoPilot;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class FTPServer {
     private ServerSocket serverSocket;
@@ -94,6 +97,11 @@ public class FTPServer {
         System.out.println("The file has been sent successfully.");
     }
 
+    public String typeCommand() {
+        Scanner scanCmd = new Scanner(System.in);
+        return scanCmd.nextLine().toUpperCase();
+    }
+
     public static void main(String[] args) throws Exception {
         // Création du serveur FTP avec choix du port
         FTPServer server = new FTPServer();
@@ -104,7 +112,9 @@ public class FTPServer {
             System.out.println("\nWaiting for a request from client");
 
             server.out.flush();
-            String cmd = server.in.readLine();
+            String cmd = server.typeCommand();
+
+            // Split commands
 
             switch (cmd){
                 case "GET_FILE":{
