@@ -1,5 +1,8 @@
 ## Step 1 : Making a FCP server/client able to send and save files
-Made by Aksel Vaillant with Maven and IntelliJ with a JDK 1.8
+Realized by Aksel Vaillant with Maven and IntelliJ with a JDK 1.8   
+Computer engineering students at ENSIM - Le Mans Université [FRANCE]   
+ 
+------------------
 
 ![img.png](img.png)
 
@@ -18,6 +21,8 @@ In the mono.FTPServer main, you must start the server.
 The various commands are carried out correctly with the client.
 
 Also, the choice of not splitting the command into several subparts is intended for a better user experience (UX). 
+
+https://heptadecane.medium.com/file-transfer-via-java-sockets-e8d4f30703a5
 
 ## Step 2 : Display media files and pilot a Raspberry Pi card 
 
