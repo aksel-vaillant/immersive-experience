@@ -1,5 +1,8 @@
 ## Step 1 : Making a FCP server/client able to send and save files
-Made by Aksel Vaillant with Maven and IntelliJ with a JDK 1.8
+Realized by Aksel Vaillant with Maven and IntelliJ with a JDK 1.8
+Computer engineering students at ENSIM - Le Mans Université [FRANCE]
+
+------------------
 
 ![img.png](img.png)
 
