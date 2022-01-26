@@ -50,8 +50,9 @@ public class FTPServer {
     }
 
     private void saveFile() throws Exception{
-        System.out.println("Receiving a file request from the client.");
-        String nameFile = in.readLine();
+        System.out.println("Type a file name to get.");
+        String nameFile = readCommand();
+        out.println(nameFile);
 
         // Creating the file
         File file = new File(DEFAULT_DIRECTION_FOLDER + nameFile);
@@ -66,17 +67,18 @@ public class FTPServer {
         byte[] buffer = new byte[4*1024];
         while (sizeFile > 0 && (bytes = dataInputStream.read(buffer, 0, (int)Math.min(buffer.length, sizeFile))) != -1) {
             fileOutputStream.write(buffer,0,bytes);
-            sizeFile -= bytes;      // read upto file size
+            sizeFile -= bytes;      // Read upto file size
         }
-
         fileOutputStream.close();
         System.out.println("The file has been saved successfully.");
     }
 
     private void sendFile() throws Exception{
         // Name of the file
-        String nameFile = in.readLine();
+        System.out.println("Type a file name to send.");
+        String nameFile = readCommand();
         System.out.println("Sending the file " + nameFile + " to client.");
+        out.println(nameFile);
 
         // Opening the file feed
         File file = new File(DEFAULT_DIRECTION_FOLDER + nameFile);
@@ -97,7 +99,15 @@ public class FTPServer {
         System.out.println("The file has been sent successfully.");
     }
 
-    public String typeCommand() {
+    private void playFile() throws Exception{
+        // Name of the file
+        System.out.println("Type a file name to send.");
+        String nameFile = readCommand();
+        System.out.println("Playing the file " + nameFile + " on client.");
+        out.println(nameFile);
+    }
+
+    public String readCommand() {
         Scanner scanCmd = new Scanner(System.in);
         return scanCmd.nextLine().toUpperCase();
     }
@@ -108,41 +118,54 @@ public class FTPServer {
         server.start(6846);
 
         while(true){
-            // Gestion des 3 commandes et l'arrêt du serveur
-            System.out.println("\nWaiting for a request from client");
+            // Gestion des commandes
+            System.out.println("Waiting for a request [Type commands here. More information with *help*]");
 
             server.out.flush();
-            String cmd = server.typeCommand();
+            String cmd = server.readCommand();
 
             // Split commands
 
             switch (cmd){
-                case "GET_FILE":{
-                    server.sendFile();
+                case "LS":{
+                    server.out.println("LS_DIR");
+                    System.out.println(server.in.readLine());
                     break;
                 }
-                case "PUT_FILE":{
+                case "GET":{
+                    server.out.println("GET_FILE");
                     server.saveFile();
                     break;
                 }
-                case "LS_DIR":{
-                    System.out.println("Display files in root folder of server.");
-                    String [] pathnames;
-                    File readerPath = new File(DEFAULT_DIRECTION_FOLDER);
-                    pathnames = readerPath.list();
-
-                    String files = "";
-                    for (String pathname : pathnames) {
-                        files += pathname + "\t";
-                    }
-                    server.out.flush();
-                    server.out.println(files);
-                    System.out.println(files);
+                case "PUT": {
+                    server.out.println("PUT_FILE");
+                    server.sendFile();
+                    break;
+                }
+                case "PLAY": {
+                    server.out.println("PLAY_FILE");
+                    server.playFile();
+                    break;
+                }
+                case "DISPLAY": {
+                    server.out.println("DISPLAY_FILE");
+                    //server.displayFile();
                     break;
                 }
                 case "STOP":{
                     server.stop();
                     System.exit(1);
+                }
+                case "HELP":{
+                    System.out.println("List of available commands...");
+                    System.out.println("LS\t\tTo list computer files in server root folder");
+                    System.out.println("GET\t\tTo get a file from server");
+                    System.out.println("PUT\t\tTo send a file to server");
+                    System.out.println("STOP\t\tTo stop communicating with server");
+                    break;
+                }
+                default:{
+                    System.out.println("Oops... An error has occurred. Consult the support with HELP if necessary.");
                 }
             }
         }

@@ -16,7 +16,10 @@ public class FTPClient {
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
 
+    // On Windows
     private final String DEFAULT_DIRECTION_FOLDER = "src\\main\\resources\\CLIENT_DIR\\";
+    // On Linux
+    // private final String DEFAULT_DIRECTION_FOLDER = "resources/CLIENT_DIR/";
 
     public void startConnection(String name, int port) throws IOException {
         clientSocket = new Socket(name, port);
@@ -99,7 +102,11 @@ public class FTPClient {
     public static void main(String args[]) throws Exception {
         // Création du client FTP avec choix du nom et du port
         FTPClient client = new FTPClient();
+
+        // On Windows
         client.startConnection("localhost", 6846);
+        // On Linux
+        //client.startConnection("169.254.236.142", 6846);
 
         while(true){
             // Gestion des commandes
