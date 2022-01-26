@@ -99,7 +99,7 @@ public class FTPServer {
         System.out.println("The file has been sent successfully.");
     }
 
-    private void playFile() throws Exception{
+    private void playFile(){
         // Name of the file
         System.out.println("Type a file name to send.");
         String nameFile = readCommand();
@@ -107,9 +107,17 @@ public class FTPServer {
         out.println(nameFile);
     }
 
+    private void displayFile(){
+        // Name of the file
+        System.out.println("Type a file name to send.");
+        String nameFile = readCommand();
+        System.out.println("Displaying the file " + nameFile + " on client.");
+        out.println(nameFile);
+    }
+
     public String readCommand() {
         Scanner scanCmd = new Scanner(System.in);
-        return scanCmd.nextLine().toUpperCase();
+        return scanCmd.nextLine();
     }
 
     public static void main(String[] args) throws Exception {
@@ -119,10 +127,10 @@ public class FTPServer {
 
         while(true){
             // Gestion des commandes
-            System.out.println("Waiting for a request [Type commands here. More information with *help*]");
+            System.out.println("\nWaiting for a request [Type commands here. More information with *help*]");
 
             server.out.flush();
-            String cmd = server.readCommand();
+            String cmd = server.readCommand().toUpperCase();
 
             // Split commands
 
@@ -149,7 +157,7 @@ public class FTPServer {
                 }
                 case "DISPLAY": {
                     server.out.println("DISPLAY_FILE");
-                    //server.displayFile();
+                    server.displayFile();
                     break;
                 }
                 case "STOP":{
@@ -161,7 +169,7 @@ public class FTPServer {
                     System.out.println("LS\t\tTo list computer files in server root folder");
                     System.out.println("GET\t\tTo get a file from server");
                     System.out.println("PUT\t\tTo send a file to server");
-                    System.out.println("STOP\t\tTo stop communicating with server");
+                    System.out.println("STOP\tTo stop communicating with server");
                     break;
                 }
                 default:{

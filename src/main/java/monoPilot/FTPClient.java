@@ -17,9 +17,9 @@ public class FTPClient {
     private DataOutputStream dataOutputStream;
 
     // On Windows
-    private static final String DEFAULT_DIRECTION_FOLDER = "src\\main\\resources\\CLIENT_DIR\\";
+    //private static final String DEFAULT_DIRECTION_FOLDER = "src\\main\\resources\\CLIENT_DIR\\";
     // On Linux
-    //private static final String DEFAULT_DIRECTION_FOLDER = "resources/CLIENT_DIR/";
+    private static final String DEFAULT_DIRECTION_FOLDER = "resources/CLIENT_DIR/";
 
 
     public void startConnection(String name, int port) throws IOException {
@@ -106,6 +106,19 @@ public class FTPClient {
         System.out.println("Have a nice day! ;)");
     }
 
+    private void displayFile() throws Exception{
+        System.out.println("Receiving a file request from the server.");
+        String pathFile = DEFAULT_DIRECTION_FOLDER + in.readLine();
+        String fullCommand = "feh -qrYzFD120 --zoom fill " + pathFile;
+
+        System.out.println("Gonna start to play video");
+
+        Process play = Runtime.getRuntime().exec(fullCommand);
+        play.waitFor();
+
+        System.out.println("Have a nice day! ;)");
+    }
+
     public static void main(String args[]) throws Exception {
         // Création du client FTP avec choix du nom et du port
         FTPClient client = new FTPClient();
@@ -147,7 +160,7 @@ public class FTPClient {
                     break;
                 }
                 case "DISPLAY_FILE":{
-                    //client.displayFile();
+                    client.displayFile();
                     break;
                 }
                 case "STOP":{
