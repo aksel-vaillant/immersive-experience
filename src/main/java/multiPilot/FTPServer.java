@@ -3,6 +3,7 @@ package multiPilot;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -10,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 public class FTPServer {
     private ServerSocket serverSocket;
-    private Socket clientSocket;
+    private Socket selectedClientSocket;
 
     private BufferedReader in;
     private PrintWriter out;
@@ -21,27 +22,16 @@ public class FTPServer {
     private DataOutputStream dataOutputStream;
     private DataInputStream dataInputStream;
 
-    private HandlerClient handler;
-    private Socket currentClientSocket;
     private static Map<String, Socket> listClient = new HashMap<>();
 
     private static final String DEFAULT_DIRECTION_FOLDER = "src\\main\\resources\\SERVEUR_DIR\\";
 
     public void start(int port) throws IOException, InterruptedException {
-        System.out.println("Server initialized");
-
-        // Searching for new clients
-        handler = new HandlerClient(port);
-        handler.start();
-
-        System.out.println("Before initializing");
-
-        while(listClient.size()!=0){
-            System.out.println("Waiting for new clients");
-            listClient = handler.getListClient();
-            TimeUnit.SECONDS.sleep(5);
-        }
-        System.out.println("done");
+        System.out.println("Starting the server.");
+        serverSocket = new ServerSocket(port);
+        serverSocket.setSoTimeout(1000 * 10);
+        searchClient();
+        selectClient("1");
     }
 
     public void stop() throws IOException {
@@ -53,7 +43,13 @@ public class FTPServer {
         in.close();
         out.close();
 
-        clientSocket.close();
+        // Close each clients
+        for(int i = 1; i < listClient.size() + 1; i++){
+            selectedClientSocket = listClient.get(String.valueOf(i));
+            sendMessage("Close the server");
+            selectedClientSocket.close();
+        }
+        
         serverSocket.close();
     }
 
@@ -123,6 +119,48 @@ public class FTPServer {
         out.println(nameFile);
     }
 
+    private void searchClient(){
+        try{
+            System.out.println("Seeking for clients");
+            Socket clientSocket = serverSocket.accept();
+
+            if(!listClient.containsValue(clientSocket)){
+                //System.out.println("New client\t" + clientSocket);
+                listClient.put(String.valueOf(listClient.size()+1),clientSocket);
+                System.out.println(listClient.entrySet());
+            }else{
+                // Send a message welcome back to the client!
+                System.out.println("Welcome back! :3");
+            }
+        }
+        catch (SocketTimeoutException e){
+            System.out.println("Stop searching.");
+            return;
+        }
+        catch (IOException e){
+            System.out.println("A lil error happened in the handler client.");
+            e.printStackTrace();
+        }
+    }
+
+    private void selectClient(String idClient) throws IOException {
+        selectedClientSocket = listClient.getOrDefault(String.valueOf(idClient), selectedClientSocket);
+
+        is = selectedClientSocket.getInputStream();
+        os = selectedClientSocket.getOutputStream();
+
+        in = new BufferedReader(new InputStreamReader(is));
+        out = new PrintWriter(os, true);
+
+        dataInputStream = new DataInputStream(is);
+        dataOutputStream = new DataOutputStream(os);
+    }
+
+    private void sendMessage(String message) {
+        out.println("MESSAGE");
+        out.println(message);
+    }
+
     public String readCommand() {
         Scanner scanCmd = new Scanner(System.in);
         return scanCmd.nextLine();
@@ -136,13 +174,10 @@ public class FTPServer {
         while(true){
             // Gestion des commandes
             System.out.println("\nWaiting for a request [Type commands here. More information with *help*]");
-
-
             server.out.flush();
             String cmd = server.readCommand().toUpperCase();
 
             // Split commands
-
             switch (cmd){
                 case "LS":{
                     server.out.println("LS_DIR");
@@ -169,9 +204,25 @@ public class FTPServer {
                     server.displayFile();
                     break;
                 }
+                case "SEARCH":{
+                    server.searchClient();
+                    break;
+                }
                 case "SELECT": {
-                    listClient = server.handler.getListClient();
+                    System.out.println("List of clients connect to the server\n");
                     System.out.println(listClient.entrySet());
+
+                    System.out.println("Type an ID of client to set.");
+                    String idClient = server.readCommand();
+                    server.selectClient(idClient);
+                    break;
+                }
+                case "EX":{
+                    server.selectClient("1");
+                    server.sendMessage("Hello 1");
+
+                    server.selectClient("2");
+                    server.sendMessage("Hello 2");
                     break;
                 }
                 case "STOP":{
