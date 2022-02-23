@@ -22,16 +22,18 @@ public class FTPServer {
     private DataOutputStream dataOutputStream;
     private DataInputStream dataInputStream;
 
-    private static Map<String, Socket> listClient = new HashMap<>();
+    private static Map<Integer, Socket> listClient = new HashMap<>();
 
     private static final String DEFAULT_DIRECTION_FOLDER = "src\\main\\resources\\SERVEUR_DIR\\";
 
-    public void start(int port) throws IOException, InterruptedException {
+    public void start(int port) throws IOException {
         System.out.println("Starting the server.");
         serverSocket = new ServerSocket(port);
         serverSocket.setSoTimeout(1000 * 10);
-        searchClient();
-        selectClient("1");
+        while(listClient.isEmpty()){
+            searchClient();
+        }
+        selectClient(1);
     }
 
     public void stop() throws IOException {
@@ -45,7 +47,7 @@ public class FTPServer {
 
         // Close each clients
         for(int i = 1; i < listClient.size() + 1; i++){
-            selectedClientSocket = listClient.get(String.valueOf(i));
+            selectedClientSocket = listClient.get(i);
             sendMessage("Close the server");
             selectedClientSocket.close();
         }
@@ -53,10 +55,61 @@ public class FTPServer {
         serverSocket.close();
     }
 
-    private void saveFile() throws Exception{
-        System.out.println("Type a file name to get.");
-        String nameFile = readCommand();
-        out.println(nameFile);
+    private void searchClient(){
+        System.out.println("Seeking for clients. [Wait approximately 10s]");
+        while(true){
+            try{
+                Socket clientSocket = serverSocket.accept();
+
+                if(!listClient.containsValue(clientSocket)){
+                    //System.out.println("New client\t" + clientSocket);
+                    listClient.put(listClient.size()+1,clientSocket);
+                    //System.out.println(listClient.entrySet());
+                }else{
+                    // Send a message welcome back to the client!
+                    System.out.println("Welcome back! :3");
+                }
+            }
+            catch (SocketTimeoutException e){
+                System.out.println("Stop searching.");
+                return;
+            }
+            catch (IOException e){
+                System.out.println("A lil error happened in the handler client.");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void selectClient(int idClient) throws IOException {
+        selectedClientSocket = listClient.getOrDefault(idClient, selectedClientSocket);
+
+        is = selectedClientSocket.getInputStream();
+        os = selectedClientSocket.getOutputStream();
+
+        in = new BufferedReader(new InputStreamReader(is));
+        out = new PrintWriter(os, true);
+
+        dataInputStream = new DataInputStream(is);
+        dataOutputStream = new DataOutputStream(os);
+    }
+
+    private void sendMessage(String message){
+        out.println(message);
+    }
+
+    private String readMessage() throws IOException {
+        return in.readLine();
+    }
+
+    private String readCommand() {
+        Scanner scanCmd = new Scanner(System.in);
+        return scanCmd.nextLine();
+    }
+
+    private void saveFile(String nameFile) throws Exception{
+        sendMessage("GET_FILE");
+        sendMessage(nameFile);
 
         // Creating the file
         File file = new File(DEFAULT_DIRECTION_FOLDER + nameFile);
@@ -77,12 +130,11 @@ public class FTPServer {
         System.out.println("The file has been saved successfully.");
     }
 
-    private void sendFile() throws Exception{
-        // Name of the file
-        System.out.println("Type a file name to send.");
-        String nameFile = readCommand();
+    private void sendFile(String nameFile) throws Exception{
+        sendMessage("PUT_FILE");
+        sendMessage(nameFile);
+
         System.out.println("Sending the file " + nameFile + " to client.");
-        out.println(nameFile);
 
         // Opening the file feed
         File file = new File(DEFAULT_DIRECTION_FOLDER + nameFile);
@@ -103,126 +155,119 @@ public class FTPServer {
         System.out.println("The file has been sent successfully.");
     }
 
-    private void playFile(){
-        // Name of the file
-        System.out.println("Type a file name to send.");
-        String nameFile = readCommand();
-        System.out.println("Playing the file " + nameFile + " on client.");
-        out.println(nameFile);
-    }
+    private void playFile(int idClient, String nameFile) throws Exception {
+        selectClient(idClient);
 
-    private void displayFile(){
-        // Name of the file
-        System.out.println("Type a file name to send.");
-        String nameFile = readCommand();
-        System.out.println("Displaying the file " + nameFile + " on client.");
-        out.println(nameFile);
-    }
-
-    private void searchClient(){
-        try{
-            System.out.println("Seeking for clients");
-            Socket clientSocket = serverSocket.accept();
-
-            if(!listClient.containsValue(clientSocket)){
-                //System.out.println("New client\t" + clientSocket);
-                listClient.put(String.valueOf(listClient.size()+1),clientSocket);
-                System.out.println(listClient.entrySet());
-            }else{
-                // Send a message welcome back to the client!
-                System.out.println("Welcome back! :3");
-            }
+        sendMessage("LS_DIR");
+        if(!readMessage().contains(nameFile)){
+            sendFile(nameFile);
         }
-        catch (SocketTimeoutException e){
-            System.out.println("Stop searching.");
-            return;
+
+        sendMessage("PLAY_FILE");
+        sendMessage(nameFile);
+    }
+
+    private void displayFile(int idClient, String nameFile) throws Exception {
+        selectClient(idClient);
+
+        sendMessage("LS_DIR");
+        if(!readMessage().contains(nameFile)){
+            sendFile(nameFile);
         }
-        catch (IOException e){
-            System.out.println("A lil error happened in the handler client.");
-            e.printStackTrace();
-        }
-    }
 
-    private void selectClient(String idClient) throws IOException {
-        selectedClientSocket = listClient.getOrDefault(String.valueOf(idClient), selectedClientSocket);
-
-        is = selectedClientSocket.getInputStream();
-        os = selectedClientSocket.getOutputStream();
-
-        in = new BufferedReader(new InputStreamReader(is));
-        out = new PrintWriter(os, true);
-
-        dataInputStream = new DataInputStream(is);
-        dataOutputStream = new DataOutputStream(os);
-    }
-
-    private void sendMessage(String message) {
-        out.println("MESSAGE");
-        out.println(message);
-    }
-
-    public String readCommand() {
-        Scanner scanCmd = new Scanner(System.in);
-        return scanCmd.nextLine();
+        sendMessage("DISPLAY_FILE");
+        sendMessage(nameFile);
     }
 
     public static void main(String[] args) throws Exception {
         // Création du serveur FTP avec choix du port
         FTPServer server = new FTPServer();
         server.start(6846);
+        System.out.println("At the moment, there's " + listClient.size() + " client(s) connected.");
 
         while(true){
             // Gestion des commandes
             System.out.println("\nWaiting for a request [Type commands here. More information with *help*]");
             server.out.flush();
-            String cmd = server.readCommand().toUpperCase();
+            String[] cmds = server.readCommand().split("\\s+");
 
             // Split commands
-            switch (cmd){
-                case "LS":{
-                    server.out.println("LS_DIR");
-                    System.out.println(server.in.readLine());
-                    break;
-                }
-                case "GET":{
-                    server.out.println("GET_FILE");
-                    server.saveFile();
-                    break;
-                }
-                case "PUT": {
-                    server.out.println("PUT_FILE");
-                    server.sendFile();
-                    break;
-                }
-                case "PLAY": {
-                    server.out.println("PLAY_FILE");
-                    server.playFile();
-                    break;
-                }
-                case "DISPLAY": {
-                    server.out.println("DISPLAY_FILE");
-                    server.displayFile();
+            switch (cmds[0].toUpperCase()){
+                case "SELECT": {
+                    if(cmds.length!=2) break;
+                    int selectedClientId = Integer.parseInt(cmds[1]);
+                    server.selectClient(selectedClientId);
                     break;
                 }
                 case "SEARCH":{
+                    int size = listClient.size();
                     server.searchClient();
+                    if(listClient.size() > size) System.out.println("There's " + (listClient.size() - size) + " new client(s).");
                     break;
                 }
-                case "SELECT": {
-                    System.out.println("List of clients connect to the server\n");
-                    System.out.println(listClient.entrySet());
-
-                    System.out.println("Type an ID of client to set.");
-                    String idClient = server.readCommand();
-                    server.selectClient(idClient);
+                case "LS":{
+                    server.sendMessage("LS_DIR");
+                    System.out.println(server.readMessage());
+                    break;
+                }
+                case "GET":{
+                    if(cmds.length!=2){
+                        System.out.println("You need 2 arguments to use this function : the function's name itself and the name of file you wanna get from the client.");
+                        break;
+                    }
+                    String nameFile = cmds[1];
+                    server.saveFile(nameFile);
+                    break;
+                }
+                case "PUT": {
+                    if(cmds.length!=2){
+                        System.out.println("You need 2 arguments to use this function : the function's name itself and the name of file you wanna put on the client.");
+                        break;
+                    }
+                    String nameFile = cmds[1];
+                    server.sendFile(nameFile);
+                    break;
+                }
+                case "PLAY": {
+                    try {
+                        //server.sendMessage("PLAY_FILE");
+                        if(cmds.length!=3){
+                            System.out.println("You need 3 arguments to use this function : the function's name itself, the id of your client and the name file.");
+                            break;
+                        }
+                        int selectedClientId = Integer.parseInt(cmds[1]);
+                        String nameFile = cmds[2];
+                        server.playFile(selectedClientId, nameFile);
+                    }
+                    catch (Exception e){
+                        System.out.println("An error occured. You can use play function like this : play 1 jason.mov");
+                    }
+                    break;
+                }
+                case "DISPLAY": {
+                    try{
+                        //server.sendMessage("DISPLAY_FILE");
+                        if(cmds.length!=3){
+                            System.out.println("You need 3 arguments to use this function : the function's name itself, the id of your client and the name file.");
+                            break;
+                        }
+                        int selectedClientId = Integer.parseInt(cmds[1]);
+                        String nameFile = cmds[2];
+                        server.displayFile(selectedClientId, nameFile);
+                    }catch (Exception e){
+                        System.out.println("An error occured. You can use display function like this : display 1 jason.mov");
+                    }
                     break;
                 }
                 case "EX":{
-                    server.selectClient("1");
-                    server.sendMessage("Hello 1");
+                    server.playFile(1, "jason.mov");
+                    server.playFile(2, "jason.mov");
 
-                    server.selectClient("2");
-                    server.sendMessage("Hello 2");
+                    /*for(int i = 1; i<3; i++){
+                        server.selectClient(i);
+                        server.sendMessage("Ceci est un message pour toi n*" + i);
+                    }*/
+
                     break;
                 }
                 case "STOP":{

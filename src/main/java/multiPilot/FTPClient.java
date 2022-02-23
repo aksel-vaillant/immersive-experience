@@ -17,9 +17,9 @@ public class FTPClient {
     private DataOutputStream dataOutputStream;
 
     // On Windows
-    //private static final String DEFAULT_DIRECTION_FOLDER = "src\\main\\resources\\CLIENT_DIR\\";
+    private static final String DEFAULT_DIRECTION_FOLDER = "src\\main\\resources\\CLIENT_DIR\\";
     // On Linux
-    private static final String DEFAULT_DIRECTION_FOLDER = "resources/CLIENT_DIR/";
+    //private static final String DEFAULT_DIRECTION_FOLDER = "resources/CLIENT_DIR/";
 
 
     public void startConnection(String name, int port) throws IOException {
@@ -122,7 +122,8 @@ public class FTPClient {
     public static void main(String args[]) throws Exception {
         // Création du client FTP avec choix du nom et du port
         FTPClient client = new FTPClient();
-        client.startConnection("169.254.236.142", 6846);
+        // 169.254.236.142
+        client.startConnection("localhost", 6846);
 
         while(true){
             // Gestion des commandes
@@ -163,15 +164,14 @@ public class FTPClient {
                     client.displayFile();
                     break;
                 }
-                case "MESSAGE":{
-                    client.out.flush();
-                    System.out.println(client.in.readLine());
-                }
                 case "STOP":{
                     client.out.println("STOP");
                     client.stopConnection();
                     System.out.println("Stopping the communication with the server.");
                     System.exit(1);
+                }
+                default: {
+                    System.out.println(cmd);
                 }
             }
         }
