@@ -29,15 +29,15 @@ To finish, in multiPilot, you can control Raspberry Pi cards from a single one a
 
 ## Downloading
 
-`git clone https://github.com/aksel-vaillant/immersive-experience.git`
+    git clone https://github.com/aksel-vaillant/immersive-experience.git
 
 ## Materials
 
-- [x] 1 Raspberry Pi card as server or you can use a PC as well.    
-- [x] 1 ethernet cable for the server.     
-- [x] X Raspberry Pi cards as clients.   
-- [x] 1 pair of hdmi (the output. ie a video-projector, a screen, etc) and ethernet cables for each client.       
-- [x] 1 Hub to connect your clients and server all together in a proper local network.
+- [X] 1 Raspberry Pi card as server or you can use a PC as well.    
+- [X] 1 ethernet cable for the server.     
+- [X] X Raspberry Pi cards as clients.   
+- [X] 1 pair of hdmi (the output. ie a video-projector, a screen, etc) and ethernet cables for each client.       
+- [X] 1 Hub to connect your clients and server all together in a proper local network.
 
 ## Step 1 : Making a FCP server/client able to send and save files 
 
@@ -55,13 +55,13 @@ Example test of the location of the resource files for the client :
 First, you have to run FTPServer.main, and then, the FTPClient.main.  
 You can try mono package with a video file or a simple picture to transfer a file throught this architecture. 
 
-Ressource : https://heptadecane.medium.com/file-transfer-via-java-sockets-e8d4f30703a5
+Ressource https://heptadecane.medium.com/file-transfer-via-java-sockets-e8d4f30703a5
 
 ## Step 2 : Display media files and pilot a Raspberry Pi card 
 
-The aim of this part is to connect a server with a couple of Raspeberry Pi cards to display different contents such as picture or video. 
+The aim of this part is to connect a client to a server and display different contents such as pictures or videos. 
 
-Once all files setup, I will be able to display and run those contents while piloting those cards with omxplayer (unix library)
+Once all files setup and downloaded, you will be able to display and run those contents while piloting those cards with unix libraries
 
 <em>in development</em>
 
