@@ -12,6 +12,8 @@ From a goverment-region plan, Anne-Laure Fortin Tournès and Anna Street worked 
 
 As a group of students from the engineering school of Le Mans - [ENSIM](http://ensim.univ-lemans.fr/fr/index.html), we have chosen for our 4th year's project to create an immersive and interactive exhibition of [M. deCaires Taylor works](https://www.underwatersculpture.com). 
 
+<img src="assets/JasondeCairesTaylor_Lanzarote05.jpg" width="100%">
+
 More information about our exhibition show here.  
 
 Furthermore, my part consist to develop something able to synchronize video and audio streams from Raspberry Pi cards and play differents media files, whatever the extension, on video projectors and speakers. 
@@ -25,7 +27,7 @@ Through mono package, you will find a client-server architecture able to transfe
 
 And with monoPilot, you'll be able to work with 2 unix libraries nammed [omxplayer](https://github.com/popcornmix/omxplayer) (command-line video player for the Raspberry Pi) and [feh](https://feh.finalrewind.org) (image viewer) which means, from a command-line on server, you can display a picture or play a video on a client. 
 
-To finish, in multiPilot, you can control Raspberry Pi cards from a single one and pilot them from a server.  
+To finish, in multiPilot, you can control Raspberry Pi cards from a single one and pilot them from the server.  
 
 ## Downloading
 
@@ -33,15 +35,35 @@ To finish, in multiPilot, you can control Raspberry Pi cards from a single one a
 
 ## Materials
 
+<div align="center">
+    <img src="assets/Materials.jpg">
+</div>     
+
 - [X] 1 Raspberry Pi card as server or you can use a PC as well.    
 - [X] 1 ethernet cable for the server.     
-- [X] X Raspberry Pi cards as clients.   
+- [X] N Raspberry Pi cards as clients.   
 - [X] 1 pair of hdmi (the output. ie a video-projector, a screen, etc) and ethernet cables for each client.       
 - [X] 1 Hub to connect your clients and server all together in a proper local network.
 
+## Commands
+
+    help                        Print this help
+    stop                        Stop the server and all clients
+    
+    select                      Select a connected client
+    search                      Search new clients to etablish a connection
+    ls                          List client computer files
+    get                         Save a file from client
+    put                         Send a file to a client
+    play                        Play a video file
+    display                     Display a picture
+    ex                          Start synchronising all video streams on selected clients
+
 ## Step 1 : Making a FCP server/client able to send and save files 
 
-![img.png](img.png)
+<div align="center">
+    <img src="assets/ftp_architecture_network.png">
+</div>  
 
 ### How to use it  
 To make the program work, you must first fill the DEFAULT_DIRECTION_FOLDER which contains the server and client files, and add a double backslash at the end.  
@@ -61,9 +83,7 @@ Ressource https://heptadecane.medium.com/file-transfer-via-java-sockets-e8d4f307
 
 The aim of this part is to connect a client to a server and display different contents such as pictures or videos. 
 
-Once all files setup and downloaded, you will be able to display and run those contents while piloting those cards with unix libraries
-
-<em>in development</em>
+Once all your files setup and downloaded, you will be able to display and play those contents while piloting Raspberry Pi cards with 2 unix libraries nammed [omxplayer](https://github.com/popcornmix/omxplayer) (command-line video player for the Raspberry Pi) and [feh](https://feh.finalrewind.org) (image viewer)
 
 ## FAQ 
 
