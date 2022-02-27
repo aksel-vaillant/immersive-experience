@@ -122,7 +122,7 @@ public class FTPClient {
     public static void main(String args[]) throws Exception {
         // Création du client FTP avec choix du nom et du port
         FTPClient client = new FTPClient();
-        client.startConnection("169.254.236.142", 6846);
+        client.startConnection("localhost", 6846);
 
         while(true){
             // Gestion des commandes
