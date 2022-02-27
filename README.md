@@ -112,11 +112,11 @@ To display a picture
     -q, --quiet                     Don't report non-fatal errors for failed loads.
     -r, --recursive                 Recursively expand any directories
     -Y, --hide-pointer              Hide the pointer
-    -z, --randomize                 When viewing multiple files in a slideshow, randomize the file list before displaying. 
+    -z, --randomize                 When viewing multiple files in a slideshow, randomize the file list. 
                                     The list is re-randomized whenever the slideshow cycles.
     -F, --fullscreen                Make the window fullscreen.
-    -D, --slideshow-delay [float]   For slideshow mode, wait float seconds between automatically changing slides.
-    --zoom [percent | max | fill]   Zoom images by percent when in full screen mode or when window geometry is fixed.
+    -D, --slideshow-delay [float]   Wait float seconds between automatically changing slides.
+    --zoom [percent | max | fill]   Zoom images by percent.
 
 ## Step 3 : Handling clients and synchronising video streams
 
