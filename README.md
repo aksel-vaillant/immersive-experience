@@ -124,7 +124,7 @@ In this part, I have chosen to add a search command. After 10 seconds, it will g
 
 From this list made with numbers (1,2,3,...) you will be able to select your Raspberry Pi card.
 
-> That's why it's important to turn them on in a order you have thought before starting the server.
+> That's why it's important to turn them on in an order you have thought of before starting the server.
 
 With the ex command, you can prepare and setup the programmation of your cards with correct files.
 
