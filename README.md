@@ -8,7 +8,7 @@ Under the direction of Ms. Catherine Cléder
 
 ## Some context  
 
-From a goverment-region plan, Anne-Laure Fortin Tournès and Anna Street worked on [Performing Water](https://performingwater.org) and propose series of webinars designed to bring scholars, activists, and artists together in exploring how water shapes our politics and our thinking practices.  
+From a goverment-region plan, Anne-Laure Fortin Tournès and Anna Street worked on [Performing Water](https://performingwater.org) and proposed series of webinars designed to bring scholars, activists, and artists together in exploring how water shapes our politics and our thinking practices.  
 
 As a group of students from the engineering school of Le Mans - [ENSIM](http://ensim.univ-lemans.fr/fr/index.html), we have chosen for our 4th year's project to create an immersive and interactive exhibition of [M. deCaires Taylor works](https://www.underwatersculpture.com). 
 
@@ -16,7 +16,7 @@ As a group of students from the engineering school of Le Mans - [ENSIM](http://e
 
 More information about our exhibition show here.  
 
-Furthermore, my part consist to develop something able to synchronize video and audio streams from Raspberry Pi cards and play differents media files, whatever the extension, on video projectors and speakers. 
+Furthermore, my role is to develop something that can synchronize video and audio streams from Raspberry Pi cards and play differents media files,  regardless of their extension, on video projectors and speakers.   
 
 I will try to explain how I developped and created this program right below this part.
 
@@ -25,7 +25,7 @@ I worked on different packages to see my progress but mainly to propose solution
 
 Through mono package, you will find a client-server architecture able to transfer files. It means you can get files from a client and put specific files on client.
 
-And with monoPilot, you'll be able to work with 2 unix libraries nammed [omxplayer](https://github.com/popcornmix/omxplayer) (command-line video player for the Raspberry Pi) and [feh](https://feh.finalrewind.org) (image viewer) which means, from a command-line on server, you can display a picture or play a video on a client. 
+And with monoPilot, you'll be able to work with 2 unix libraries named [omxplayer](https://github.com/popcornmix/omxplayer) (command-line video player for the Raspberry Pi) and [feh](https://feh.finalrewind.org) (image viewer) which means, from a command-line on server, you can display a picture or play a video on a client. 
 
 To finish, in multiPilot, you can control Raspberry Pi cards from a single one and pilot them from the server.  
 
@@ -83,7 +83,7 @@ Ressource https://heptadecane.medium.com/file-transfer-via-java-sockets-e8d4f307
 
 The aim of this part is to connect a client to a server and display different contents such as pictures or videos. 
 
-Once all your files setup and downloaded, you will be able to display and play those contents while piloting Raspberry Pi cards with 2 unix libraries nammed [omxplayer](https://github.com/popcornmix/omxplayer) (command-line video player for the Raspberry Pi) and [feh](https://feh.finalrewind.org) (image viewer)
+Once all your files are setup and downloaded, you will be able to display and play those contents while piloting Raspberry Pi cards with 2 unix libraries named [omxplayer](https://github.com/popcornmix/omxplayer) (command-line video player for the Raspberry Pi) and [feh](https://feh.finalrewind.org) (image viewer)
 
 First, you need to make sure you have those unix librairies on your Raspberry Pi cards
 
