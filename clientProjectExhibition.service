@@ -1,0 +1,16 @@
+[Unit]
+Description=Run the client to connect it automatically with the server
+
+Wants=network.target
+After=syslog.target network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory = /home/pi/Documents/dev
+ExecStart=java multiPilot.FTPClient
+Restart=on-failure
+RestartSec=10
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
