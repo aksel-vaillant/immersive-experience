@@ -132,8 +132,7 @@ You only have to write which card you want with which file.
 
 Then, in case your client doesn't have the file yet, it will be download before playing/displaying, you will probably have lil delay. 
 
-## FAQ 
+--------------
 
-
-
-
+If you still need some help or didn't understand a part, feel free to check the HELP file with few simple tutorials I made.
+You will find more information and few useful resources. 
